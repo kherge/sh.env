@@ -366,7 +366,7 @@ __env_list()
     echo "Available options:"
     echo
 
-    find "$ENV_DIR/options" -name '*.txt' | while read FILE; do
+    find "$ENV_DIR/options" -name '*.txt' | while read -r FILE; do
         cat "$FILE"
     done
 }
