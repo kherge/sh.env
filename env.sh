@@ -334,7 +334,8 @@ __env_enable()
             return 1
         fi
 
-        __ENV_ENABLED="$__ENV_ENABLED\n$__ENV_PRIORITY|$__ENV_OPTION"
+        __ENV_ENABLED="$__ENV_ENABLED
+$__ENV_PRIORITY|$__ENV_OPTION"
         __ENV_ENABLED="$(echo "$__ENV_ENABLED" | sort)"
     else
         __ENV_ENABLED="$__ENV_PRIORITY|$__ENV_OPTION"
