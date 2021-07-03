@@ -196,6 +196,7 @@ __env_option_enable()
 {
     __env_debug "enabling option..."
 
+    local ACTIVATOR="__env_option_${1}_activate"
     local ENABLER="__env_option_${1}_enable"
     local FILE="$ENV_DIR/options/$1.sh"
     local NAME="$1"
@@ -220,6 +221,18 @@ __env_option_enable()
         fi
     else
         __env_debug "enabler not defined"
+    fi
+
+    if ! type "$ACTIVATOR" > /dev/null 2>&1; then
+        __env_err "option does not have an activator"
+
+        return 1
+    fi
+
+    if ! "$ACTIVATOR"; then
+        __env_err "$NAME: option could not be activated"
+
+        return 1
     fi
 
     unset "__env_option_${NAME}_activate"
