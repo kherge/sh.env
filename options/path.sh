@@ -109,10 +109,7 @@ __env_option_path_enable()
     __ENV_PRIORITY=00
 
     # Set default paths.
-    __env_option_path_add '$HOME/.cargo/bin'
     __env_option_path_add '$HOME/.local/bin' 99
-    __env_option_path_add '$HOME/.phpenv/bin'
-    __env_option_path_add '$HOME/.rvm/bin'
 }
 
 ################################################################################
