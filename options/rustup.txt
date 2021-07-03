@@ -1,0 +1,3 @@
+         rustup  Adds support for rustup by downloading and installing it if
+                 it is not available. Once installed, the the Cargo path is
+                 added to PATH.
