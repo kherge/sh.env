@@ -373,9 +373,13 @@ option_list()
 ##
 option()
 {
+    __env_debug "arguments: $@"
+
     local OPTION
 
     while getopts d:e:hl OPTION; do
+        __env_debug "option: $OPTION"
+
         case "$OPTION" in
             e) option_enable "$OPTARG";;
             d) option_disable "$OPTARG";;
