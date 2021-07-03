@@ -286,6 +286,24 @@ option_enable()
 }
 
 ###
+# Lists all available options.
+##
+option_list()
+{
+    local FILE
+
+    echo "Available options:"
+    echo
+
+    find "$ENV_DIR/options" -name '*.txt' | \
+    while read -r FILE; do
+        cat "$FILE"
+
+        echo
+    done
+}
+
+###
 # Provides the user with a way of customizing their environment.
 #
 # @param  $@  The command arguments.
@@ -296,10 +314,11 @@ option()
 {
     local OPTION
 
-    while getopts d:e: OPTION; do
+    while getopts d:e:l OPTION; do
         case "$OPTION" in
             e) option_enable "$OPTARG";;
             d) option_disable "$OPTARG";;
+            l) option_list;;
             *) return 1;;
         esac
     done
