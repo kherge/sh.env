@@ -27,7 +27,7 @@ __env_config_get()
 
     if [ -f "$ENV_CONFIG/$NAME" ]; then
         if ! cat "$ENV_CONFIG/$NAME"; then
-            echo "env: could not read configuration setting" >&2
+            __env_err "env: could not read configuration setting" >&2
 
             return 1
         fi
