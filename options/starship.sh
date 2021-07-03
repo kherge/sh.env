@@ -2,7 +2,8 @@
 ################################################################################
 # Starship Prompt                                         https://starship.rs/ #
 #                                                                              #
-# Activates Starship if it is available in PATH.                               #
+# Adds support for the Starship cross-shell prompt by installing it if it is   #
+# not available. Once installed, the shell specific prompt is set.             #
 ################################################################################
 
 ###
@@ -41,4 +42,18 @@ __env_option_starship_enable()
 {
     # Should probably be the last thing loaded.
     __ENV_PRIORITY=99
+
+    # The cargo command is required.
+    if ! command -v cargo > /dev/null; then
+        __env_err "rustup: cargo is required"
+
+        return 1
+    fi
+
+    # Install Starship if not available.
+    if ! command -v starship > /dev/null; then
+        if ! cargo install starship; then
+            return 1
+        fi
+    fi
 }

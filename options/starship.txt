@@ -1,3 +1,3 @@
-       starship  Simply initializes the Starship cross-shell prompt if it is
-                 available in PATH and a supported shell is running. Consider
-                 enabling "path" option to support Cargo in PATH.
+       starship  Adds support for the Starship cross-shell prompt by installing
+                 it if it is not available. Once installed, the shell specific
+                 prompt is set.
