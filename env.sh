@@ -72,7 +72,7 @@ __env_config_set()
 __env_debug()
 {
     if [ "$DEBUG" = '1' ]; then
-        echo "env [debug]: $*" >&2
+        echo "env [debug]: $@" >&2
     fi
 }
 
@@ -83,7 +83,7 @@ __env_debug()
 ##
 __env_err()
 {
-    echo "env: $*" >&2
+    echo "env: $@" >&2
 }
 
 ###
