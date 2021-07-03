@@ -297,11 +297,13 @@ option_disable()
 
     if __env_option_enabled "$1"; then
         if __env_option_disable "$1"; then
-            __env_option_remove "$1"
+            if __env_option_remove "$1"; then
+                return 0
+            fi
         fi
-    fi
 
-    return $?
+        return 1
+    fi
 }
 
 ###
@@ -317,11 +319,13 @@ option_enable()
 
     if __env_option_disabled "$1"; then
         if __env_option_enable "$1"; then
-            __env_option_add "$1"
+            if __env_option_add "$1"; then
+                return 0
+            fi
         fi
-    fi
 
-    return $?
+        return 1
+    fi
 }
 
 ###
