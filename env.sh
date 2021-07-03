@@ -428,6 +428,10 @@ __env_load()
     if ! "$ACTIVATOR"; then
         __env_err "$NAME: option could not be activated"
     fi
+
+    unset "__env_option_${NAME}_activate"
+    unset "__env_option_${NAME}_enable"
+    unset "__env_option_${NAME}_disable"
 }
 
 ###
