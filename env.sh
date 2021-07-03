@@ -44,6 +44,7 @@ __env_config_get()
 ##
 __env_config_set()
 {
+    local FILE="$ENV_CONFIG/$1"
     local NAME="$1"
     local VALUE="$2"
 
@@ -52,8 +53,16 @@ __env_config_set()
         VALUE="$(cat -)"
     fi
 
-    if ! echo "$VALUE" > "$ENV_CONFIG/$NAME"; then
-        echo "env: could not write configuration setting" >&2
+    if [ "$VALUE" = '' ]; then
+        if [ -f "$FILE" ] && ! rm "$FILE"; then
+            __env_err "could not delete configuration setting"
+
+            return 1
+        fi
+    fi
+
+    if ! echo "$VALUE" > "$FILE"; then
+        __env_err "env: could not write configuration setting" >&2
 
         return 1
     fi
