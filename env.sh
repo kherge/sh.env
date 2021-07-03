@@ -395,9 +395,11 @@ __env_init()
 
     if [ -f "$ENV_CONFIG/enabled" ]; then
         while read -r ENABLED; do
-            OPTION="$(echo "$ENABLED" | cut -d\| -f2)"
+            if [ "$ENABLED" != '' ]; then
+                OPTION="$(echo "$ENABLED" | cut -d\| -f2)"
 
-            __env_load "$OPTION"
+                __env_load "$OPTION"
+            fi
         done < "$ENV_CONFIG/enabled"
     fi
 
