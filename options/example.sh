@@ -20,14 +20,16 @@
 ##
 __env_option_example_activate()
 {
+    local COUNT
+
     # Increment the number of times the option has been activated.
-    if ! __EXAMPLE_COUNT="$(__env_config_get example.count)"; then
+    if ! COUNT="$(__env_config_get example.count)"; then
         return 1
     fi
 
-    __EXAMPLE_COUNT=$((__EXAMPLE_COUNT + 1))
+    COUNT=$((COUNT + 1))
 
-    if ! __env_config_set example.count $__EXAMPLE_COUNT; then
+    if ! __env_config_set example.count $COUNT; then
         return 1
     fi
 
