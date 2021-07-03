@@ -10,7 +10,11 @@
 ##
 __env_option_ps1_activate()
 {
-    PS1="\[\e[90m\][\t]\[\e[0m\] \[\e[32m\]\W\[\e[0m\] \[\e[35m\]\$\[\e[0m\] "
+    if [ "$ZSH_VERSION" != '' ]; then
+        PS1="%F{8}[%D{%H:%M:%S}]%F{none} %F{green}[%C]%F{none} %F{magenta}$%F{none} "
+    else
+        PS1="\[\e[90m\][\t]\[\e[0m\] \[\e[32m\]\W\[\e[0m\] \[\e[35m\]\$\[\e[0m\] "
+    fi
 }
 
 ###
@@ -18,10 +22,14 @@ __env_option_ps1_activate()
 ##
 __env_option_ps1_disable()
 {
+    local ORIGINAL
+
     # Restore the original prompt.
-    if ! PS1="$(__env_config_get ps1.prompt)"; then
+    if ! ORIGINAL="$(__env_config_get ps1.prompt)"; then
         return 1
     fi
+
+    PS1="$ORIGINAL"
 
     # Clean up settings.
     if ! __env_config_set ps1.prompt ""; then
