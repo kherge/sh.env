@@ -33,29 +33,53 @@ __env_option_path_activate()
     ##
     path()
     {
-        case "$1" in
+        local COMMAND="$1"; shift
+
+        case "$COMMAND" in
+            ""|-h)
+                __env_err <<'HERE'
+Usage: path COMMAND PATH
+Adds and removes managed paths.
+
+The value of PATH is evaluated before it is added to $PATH in order to
+support dynamic values. To support this evaluation, be sure to enclose
+the value in single quotes (e.g. '$HOME/my/path').
+
+ARGUMENTS
+
+    COMMAND  The command to invoke.
+    PATH     The path to be managed.
+
+COMMAND
+
+    add     Adds a managed path.
+    remove  Removes a managed path.
+
+ADD
+
+    When adding a path, an additional argument may be provided to specify
+    the priority of the path among the other managed paths. The lower the
+    number, the sooner the path is resolved before the others.
+
+        path add '$HOME/.bin' 00
+        path add '$HOME/.local/bin' 99
+HERE
+                ;;
+
             add)
-                shift
                 __env_option_path_add "$@"
                 return $?
                 ;;
 
             remove)
-                shift
                 __env_option_path_remove "$@"
                 return $?
                 ;;
 
             *)
-                echo "Usage: path COMMAND" >&2
-                echo >&2
-                echo "COMMAND" >&2
-                echo >&2
-                echo "    add     Adds a managed path." >&2
-                echo "    remove  Removes a managed path." >&2
-                echo >&2
+                __env_err "path: $COMMAND: invalid command"
 
-                return 3
+                return 1
                 ;;
         esac
     }
@@ -66,22 +90,14 @@ __env_option_path_activate()
 ##
 __env_option_path_disable()
 {
-    while getopts dh OPTION; do
-        case "$OPTION" in
-            d) __env_config_set path.paths "";;
-            h|*)
-                echo "Usage: option disable path [OPTION]" >&2
-                echo >&2
-                echo "OPTION" >&2
-                echo >&2
-                echo "    -d  Deletes settings." >&2
-                echo "    -h  Displays this help message." >&2
-                echo >&2
+    # Clean up the runtime.
+    unset __env_option_path_add
+    unset __env_option_path_remove
+    unset __env_option_path_replace
+    unset path
 
-                return 1
-                ;;
-        esac
-    done
+    # Restore the original PATH.
+    PATH="$__ENV_OPTION_PATH_ORIGINAL"
 }
 
 ###
@@ -92,40 +108,11 @@ __env_option_path_enable()
     # Make this option top priority.
     __ENV_PRIORITY=00
 
-    # Set flags.
-    __ENV_DEFAULTS=1
-
-    while getopts hnr OPTION; do
-        case "$OPTION" in
-            n) __ENV_DEFAULTS=0;;
-            r)
-                __env_config_set path.paths ""
-                ;;
-            h|*)
-                echo "Usage: option enable path [OPTION]" >&2
-                echo >&2
-                echo "OPTION" >&2
-                echo >&2
-                echo "    -n  Do not initialize with default paths." >&2
-                echo "    -r  Deletes settings before initializing." >&2
-                echo >&2
-
-                unset __ENV_DEFAULTS
-
-                return 1
-                ;;
-        esac
-    done
-
     # Set default paths.
-    if [ $__ENV_DEFAULTS -eq 1 ]; then
-        __env_option_path_add '$HOME/.cargo/bin'
-        __env_option_path_add '$HOME/.local/bin' 99
-        __env_option_path_add '$HOME/.phpenv/bin'
-        __env_option_path_add '$HOME/.rvm/bin'
-    fi
-
-    unset __ENV_DEFAULTS
+    __env_option_path_add '$HOME/.cargo/bin'
+    __env_option_path_add '$HOME/.local/bin' 99
+    __env_option_path_add '$HOME/.phpenv/bin'
+    __env_option_path_add '$HOME/.rvm/bin'
 }
 
 ################################################################################
@@ -142,43 +129,41 @@ __env_option_path_enable()
 ##
 __env_option_path_add()
 {
-    if [ "$1" = '' ]; then
-        echo "env: path: path required" >&2
+    local NEW_PATH="$1"
+    local PATHS
+    local PRIORITY="$2"
+
+    if [ "$NEW_PATH" = '' ]; then
+        __env_err "env: path: path required"
 
         return 1
     fi
 
-    __ENV_PATHS="$(__env_config_get path.paths)"
+    PATHS="$(__env_config_get path.paths)"
 
-    if echo "$__ENV_PATHS" | grep "$1" > /dev/null; then
-        unset __ENV_PATHS
-
+    if echo "$PATHS" | grep "$NEW_PATH" > /dev/null; then
         return 0
     fi
 
-    __ENV_PATH_PRIORITY=50
-
-    if [ "$2" != '' ]; then
-        __ENV_PATH_PRIORITY=$2
+    if [ "$PRIORITY" = '' ]; then
+        PRIORITY=50
     fi
 
-    __ENV_PATHS="$__ENV_PATHS
-$__ENV_PATH_PRIORITY|$1"
-    __ENV_PATHS="$(echo "$__ENV_PATHS" | sort -r)"
+    if [ "$PATHS" = '' ]; then
+        PATHS="$PRIORITY|$NEW_PATH"
+    else
+        PATHS="$PATHS
+$PRIORITY|$1"
+        PATHS="$(echo "$PATHS" | sort -r)"
+    fi
 
-    if ! __env_config_set path.paths "$__ENV_PATHS"; then
-        unset __ENV_PATHS
-        unset __ENV_PATH_PRIORITY
-
-        echo "env: path: could not update managed paths" >&2
+    if ! __env_config_set path.paths "$PATHS"; then
+        __env_err "env: path: could not update managed paths"
 
         return 1
     fi
 
     __env_option_path_replace
-
-    unset __ENV_PATH_PRIORITY
-    unset __ENV_PATHS
 }
 
 ###
@@ -190,33 +175,30 @@ $__ENV_PATH_PRIORITY|$1"
 ##
 __env_option_path_remove()
 {
-    if [ "$1" = '' ]; then
-        echo "env: path: path required" >&2
+    local OLD_PATH="$1"
+    local PATHS
+
+    if [ "$OLD_PATH" = '' ]; then
+        __env_err "env: path: path required"
 
         return 1
     fi
 
-    __ENV_PATHS="$(__env_config_get path.paths)"
+    PATHS="$(__env_config_get path.paths)"
 
-    if ! echo "$__ENV_PATHS" | grep "$1" > /dev/null; then
-        unset __ENV_PATHS
-
+    if ! echo "$PATHS" | grep "$OLD_PATH" > /dev/null; then
         return 0
     fi
 
-    __ENV_PATHS="$(echo "$__ENV_PATHS" | grep -v "$1")"
+    PATHS="$(echo "$PATHS" | grep -v "$OLD_PATH")"
 
-    if ! __env_config_set path.paths "$__ENV_PATHS"; then
-        echo "env: path: could not update managed paths" >&2
-
-        unset __ENV_PATHS
+    if ! __env_config_set path.paths "$PATHS"; then
+        __env_err "env: path: could not update managed paths"
 
         return 1
     fi
 
     __env_option_path_replace
-
-    unset __ENV_PATHS
 }
 
 ###
@@ -224,22 +206,21 @@ __env_option_path_remove()
 ##
 __env_option_path_replace()
 {
+    local MANAGED_PATH
+
     PATH="$__ENV_OPTION_PATH_ORIGINAL"
 
     if [ -f "$ENV_CONFIG/path.paths" ]; then
-        while read -r __ENV_MANAGED_PATH; do
-            if [ "$__ENV_MANAGED_PATH" != '' ]; then
-                __ENV_MANAGED_PATH="$(echo "$__ENV_MANAGED_PATH" | cut -d\| -f2)"
-                __ENV_MANAGED_PATH="$(eval "echo \"$__ENV_MANAGED_PATH\"")"
+        while read -r MANAGED_PATH; do
+            if [ "$MANAGED_PATH" != '' ]; then
+                MANAGED_PATH="$(echo "$MANAGED_PATH" | cut -d\| -f2)"
+                MANAGED_PATH="$(eval "echo \"$MANAGED_PATH\"")"
 
-                if [ -d "$__ENV_MANAGED_PATH" ] && \
-                    ! echo "$PATH" | grep "$__ENV_MANAGED_PATH:" > /dev/null; then
-                    PATH="$__ENV_MANAGED_PATH:$PATH"
+                if [ -d "$MANAGED_PATH" ] && \
+                    ! echo "$PATH" | grep "$MANAGED_PATH:" > /dev/null; then
+                    PATH="$MANAGED_PATH:$PATH"
                 fi
             fi
         done < "$ENV_CONFIG/path.paths"
     fi
-
-    unset __ENV_MANAGED_PATH
-    unset __ENV_PATHS
 }
