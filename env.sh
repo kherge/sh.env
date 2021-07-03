@@ -74,7 +74,7 @@ __env_config_set()
 __env_debug()
 {
     if [ "$DEBUG" = '1' ]; then
-        echo "env; $*" >&2
+        echo "env [debug]: $*" >&2
     fi
 }
 
@@ -97,6 +97,8 @@ __env_err()
 ##
 __env_option_add()
 {
+    __env_debug "adding option..."
+
     local ENABLED
     local NAME="$1"
 
@@ -105,6 +107,8 @@ __env_option_add()
     fi
 
     if [ "$__ENV_PRIORITY" = '' ]; then
+        __env_debug "using default priority"
+
         __ENV_PRIORITY=50
     fi
 
@@ -115,6 +119,8 @@ __env_option_add()
 $__ENV_PRIORITY|$NAME"
         ENABLED="$(echo "$ENABLED" | sort)"
     fi
+
+    __env_debug "added $NAME, priority $__ENV_PRIORITY"
 
     unset __ENV_PRIORITY
 
@@ -132,6 +138,8 @@ $__ENV_PRIORITY|$NAME"
 ##
 __env_option_disable()
 {
+    __env_debug "disabling option..."
+
     local DISABLER="__env_option_${1}_disable"
     local FILE="$ENV_DIR/options/$1.sh"
     local NAME="$1"
@@ -149,9 +157,13 @@ __env_option_disable()
     fi
 
     if type "$DISABLER" > /dev/null 2>&1; then
+        __env_debug "disabler defined"
+
         if ! "$DISABLER"; then
             return 1
         fi
+    else
+        __env_debug "disabler not defined"
     fi
 
     unset "__env_option_${NAME}_activate"
@@ -184,6 +196,8 @@ __env_option_disabled()
 ##
 __env_option_enable()
 {
+    __env_debug "enabling option..."
+
     local ENABLER="__env_option_${1}_enable"
     local FILE="$ENV_DIR/options/$1.sh"
     local NAME="$1"
@@ -201,9 +215,13 @@ __env_option_enable()
     fi
 
     if type "$ENABLER" > /dev/null 2>&1; then
+        __env_debug "enabler defined"
+
         if ! "$ENABLER"; then
             return 1
         fi
+    else
+        __env_debug "enabler not defined"
     fi
 
     unset "__env_option_${NAME}_activate"
@@ -220,13 +238,19 @@ __env_option_enable()
 ##
 __env_option_enabled()
 {
+    __env_debug "checking if enabled..."
+
     local CONFIG="$ENV_CONFIG/enabled"
 
     if [ -f "$CONFIG" ]; then
         if grep "|$1" "$CONFIG" > /dev/null; then
+            __env_debug "option is enabled"
+
             return 0
         fi
     fi
+
+    __env_debug "option is not enabled"
 
     return 1
 }
@@ -240,6 +264,8 @@ __env_option_enabled()
 ##
 __env_option_remove()
 {
+    __env_debug "removing option..."
+
     local ENABLED
     local NAME="$1"
 
@@ -248,6 +274,8 @@ __env_option_remove()
     fi
 
     ENABLED="$(echo "$ENABLED" | grep -v "|$NAME")"
+
+    __env_debug "option removed"
 
     if ! __env_config_set enabled "$ENABLED"; then
         return 1
@@ -267,6 +295,8 @@ __env_option_remove()
 ##
 option_disable()
 {
+    __env_debug "option_disable()"
+
     if __env_option_enabled "$1"; then
         if __env_option_disable "$1"; then
             __env_option_remove "$1"
@@ -285,6 +315,8 @@ option_disable()
 ##
 option_enable()
 {
+    __env_debug "option_enable()"
+
     if __env_option_disabled "$1"; then
         if __env_option_enable "$1"; then
             __env_option_add "$1"
@@ -299,6 +331,8 @@ option_enable()
 ##
 option_help()
 {
+    __env_debug "option_help()"
+
     cat - >&2 <<"HELP"
 Usage: option [OPTION]
 Manages shell personalization options.
@@ -317,6 +351,8 @@ HELP
 ##
 option_list()
 {
+    __env_debug "option_list()"
+
     local FILE
 
     echo "Available options:"
