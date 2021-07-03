@@ -459,6 +459,15 @@ __env_init()
         export ENV_CONFIG="$XDG_CONFIG_HOME/env"
     fi
 
+    # Make sure the directory exists.
+    if [ ! -d "$ENV_CONFIG" ]; then
+        if ! mkdir -p "$ENV_CONFIG"; then
+            __env_err "could not create configuration directory"
+
+	    return 1
+        fi
+    fi
+
     # Load enabled options.
     local ENABLED
     local OPTION
