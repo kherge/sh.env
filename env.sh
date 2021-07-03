@@ -369,6 +369,7 @@ option_list()
     __env_debug "option_list()"
 
     local FILE
+    local NAME
 
     echo "Available options:"
     echo
@@ -376,6 +377,14 @@ option_list()
     find "$ENV_DIR/options" -name '*.txt' | \
     sort | \
     while read -r FILE; do
+        NAME="$(basename "$FILE" .txt)"
+
+        if grep "|$NAME" "$ENV_CONFIG/enabled" > /dev/null 2>&1; then
+            echo "       (enabled)"
+        else
+            echo "      (disabled)"
+        fi
+
         cat "$FILE"
 
         echo
