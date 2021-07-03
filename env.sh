@@ -59,9 +59,7 @@ __env_config_set()
 
             return 1
         fi
-    fi
-
-    if ! echo "$VALUE" > "$FILE"; then
+    elif ! echo "$VALUE" > "$FILE"; then
         __env_err "env: could not write configuration setting" >&2
 
         return 1
