@@ -26,7 +26,7 @@ __env_option_starship_activate()
 }
 
 ###
-# Does nothing.
+# Displays a message.
 ##
 __env_option_starship_disable()
 {
@@ -35,7 +35,7 @@ __env_option_starship_disable()
 }
 
 ###
-# Does nothing.
+# Sets the priority.
 ##
 __env_option_starship_enable()
 {

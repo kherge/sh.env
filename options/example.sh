@@ -12,7 +12,7 @@
 #
 # This function is invoked when a new environment is being prepared for the
 # shell. Any functionality that this option is intended to provided will be
-# made handled or made available by this function. The function should not:
+# made available by this function. The function should not:
 #
 # - exit, only return (return value is ignored)
 # - prompt the user for any input
@@ -44,12 +44,10 @@ __env_option_example_activate()
 ###
 # Processes the disabling of the option.
 #
-# This function is invoked when the option has been requested to be disabled.
-# The function will be forwarded any additional arguments that have been
-# provided to the `option disable example ARGS...` command. The function can be
-# used to perform any cleanup operations that are necessary.
-#
-# @param $@ The additional arguments.
+# When appropriate, this function may be defined if clean up operations are
+# necessary in order to leave the runtime and system in a clean state, as if
+# the option was never loaded. It should be made possible to re-enable the
+# option without forcing the user to reload their session.
 #
 # @return 0|1 Returns `0` if successfully disabled, or `1` if not.
 ##
@@ -71,19 +69,19 @@ __env_option_example_disable()
 ###
 # Processes the enabling of the option.
 #
-# This function is invoked when the option has been requested to be enabled. The
-# function will be forwarded any additional arguments that have been provided to
-# the `option enable example ARGS...` command. The function can be used to make
-# any preparations or sanity checks that are necessary.
-#
-# @param $@ The additional arguments.
+# When appropriate, this function may be defined in order to prepare the
+# runtime or system for the activation of the option. This could come in the
+# form of setting default configuration settings, ensuring directories exist,
+# and more.
 #
 # @return 0|1 Returns `0` if successfully enabled, or `1` if not.
 ##
 __env_option_example_enable()
 {
     # By default, the priority of an option is 50. Let's change that to 00 for
-    # this script so it is one of the first to load.
+    # this script so it is one of the first to load. This could be useful when
+    # options that are loaded later depend on the state of the runtime that is
+    # prepared by this option's activation.
     __ENV_PRIORITY=00
 
     # Set some default values.
