@@ -375,6 +375,8 @@ option()
 {
     __env_debug "arguments: $@"
 
+    local OPTARG
+    local OPTIND
     local OPTION
 
     while getopts d:e:hl OPTION; do
