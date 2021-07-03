@@ -1,0 +1,4 @@
+             ls  Adds an alias named `la` and `ll` that provides nicer listing
+                 output compared to vanilla `ls`. The option detects if the
+                 version of `ls` is BSD or GNU and configures the aliases
+                 accordingly.
