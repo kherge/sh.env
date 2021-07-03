@@ -311,17 +311,16 @@ __env_enable()
         fi
     fi
 
+    __ENV_PRIORITY=50
+
     if ! "__env_option_${__ENV_OPTION}_enable" "$@"; then
         echo "env: $__ENV_OPTION: could not be enabled" >&2
 
         unset __ENV_OPTION
+        unset __ENV_PRIORITY
         __env_clean "$__ENV_OPTION"
 
         return 1
-    fi
-
-    if [ "$__ENV_PRIORITY" = '' ]; then
-        __ENV_PRIORITY=50
     fi
 
     if [ -f "$ENV_CONFIG/enabled" ]; then
