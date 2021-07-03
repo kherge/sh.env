@@ -21,7 +21,7 @@ Installation
 ------------
 
 1. Clone this repository to `~/.local/share/sh.env`.
-2. Add the following to `.profile` (or `.bashrc` for example):
+2. Add the following to `.bashrc` (or `.zshrc`, etc):
     ```sh
     ENV_DIR="$HOME/.local/share/sh.env"
     . "$ENV_DIR/env.sh"
