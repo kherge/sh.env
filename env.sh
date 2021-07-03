@@ -60,13 +60,23 @@ __env_config_set()
 }
 
 ###
+# Prints to STDERR if DEBUG is `1`.
+##
+__env_debug()
+{
+    if [ "$DEBUG" = '1' ]; then
+        echo "env; $*" >&2
+    fi
+}
+
+###
 # Prints to STDERR.
 #
 # @param $@ The message to print.
 ##
 __env_err()
 {
-    echo "env: $@" >&2
+    echo "env: $*" >&2
 }
 
 ###
