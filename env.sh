@@ -461,7 +461,6 @@ __env_init()
     fi
 
     unset __env_init
-    unset __env_load
 }
 
 # Run the initializer.
