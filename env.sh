@@ -27,7 +27,7 @@ __env_config_get()
 
     if [ -f "$ENV_CONFIG/$NAME" ]; then
         if ! cat "$ENV_CONFIG/$NAME"; then
-            __env_err "env: could not read configuration setting" >&2
+            __env_err "env: could not read configuration setting"
 
             return 1
         fi
@@ -60,7 +60,7 @@ __env_config_set()
             return 1
         fi
     elif ! echo "$VALUE" > "$FILE"; then
-        __env_err "env: could not write configuration setting" >&2
+        __env_err "env: could not write configuration setting"
 
         return 1
     fi
