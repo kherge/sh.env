@@ -374,6 +374,7 @@ option_list()
     echo
 
     find "$ENV_DIR/options" -name '*.txt' | \
+    sort | \
     while read -r FILE; do
         cat "$FILE"
 
