@@ -1,0 +1,3 @@
+           path  Adds the ability to manage paths by adding, removing, ordering,
+                 and de-duplicating paths found in PATH. The manager does not
+                 change paths defined before the option is loaded.
