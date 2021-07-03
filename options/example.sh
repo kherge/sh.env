@@ -55,6 +55,9 @@ __env_option_example_activate()
 ##
 __env_option_example_disable()
 {
+    # Clean up our runtime.
+    unset example
+
     # Clean up our settings.
     if ! __env_config_set example.count ""; then
         return 1
