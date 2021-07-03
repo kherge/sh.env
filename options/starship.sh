@@ -30,7 +30,8 @@ __env_option_starship_activate()
 ##
 __env_option_starship_disable()
 {
-    : # Do nothing.
+    # Prompt the user to reload.
+    echo "Please restart your session to unload Starship."
 }
 
 ###
