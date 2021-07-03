@@ -286,6 +286,24 @@ option_enable()
 }
 
 ###
+# Displays the help screen.
+##
+option_help()
+{
+    cat - >&2 <<"HELP"
+Usage: option [OPTION]
+Manages shell personalization options.
+
+OPTION
+
+    -e  Enables an option.
+    -d  Disables an option.
+    -h  Displays this help message.
+    -l  Lists available options.
+HELP
+}
+
+###
 # Lists all available options.
 ##
 option_list()
@@ -314,10 +332,11 @@ option()
 {
     local OPTION
 
-    while getopts d:e:l OPTION; do
+    while getopts d:e:hl OPTION; do
         case "$OPTION" in
             e) option_enable "$OPTARG";;
             d) option_disable "$OPTARG";;
+            h) option_help;;
             l) option_list;;
             *) return 1;;
         esac
