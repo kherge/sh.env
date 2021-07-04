@@ -37,7 +37,7 @@ __env_option_path_activate()
 
         case "$COMMAND" in
             ""|-h)
-                __env_err <<'HERE'
+                cat - >&2 <<'HERE'
 Usage: path COMMAND PATH
 Adds and removes managed paths.
 
