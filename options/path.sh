@@ -36,7 +36,7 @@ __env_option_path_activate()
         local COMMAND="$1"; shift
 
         case "$COMMAND" in
-            ""|-h)
+            ""|help)
                 cat - >&2 <<'HERE'
 Usage: path COMMAND PATH
 Adds and removes managed paths.
@@ -54,6 +54,7 @@ COMMAND
 
     add     Adds a managed path.
     has     Checks if a path is managed.
+    help    Displays this help message.
     remove  Removes a managed path.
 
 ADD
