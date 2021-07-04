@@ -29,7 +29,7 @@ __env_option_rustup_disable()
 ##
 __env_option_rustup_enable()
 {
-    if ! __env_config_get enabled | grep "|path" > /dev/null; then
+    if __env_option_disabled rustup; then
         __env_err "rustup: the path option is required"
 
         return 1
