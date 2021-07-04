@@ -53,6 +53,7 @@ ARGUMENTS
 COMMAND
 
     add     Adds a managed path.
+    has     Checks if a path is managed.
     remove  Removes a managed path.
 
 ADD
@@ -63,11 +64,23 @@ ADD
 
         path add '$HOME/.bin' 00
         path add '$HOME/.local/bin' 99
+
+HAS
+
+    If checking for managed paths in a programmatic manner, you may pass a
+    -q option to silence the output. The return value can be used to check
+    if the path is managed. A return value of 0 (zero) means it is managed,
+    and 1 (one) means it is not.
 HERE
                 ;;
 
             add)
                 __env_option_path_add "$@"
+                return $?
+                ;;
+
+            has)
+                __env_option_path_has "$@"
                 return $?
                 ;;
 
@@ -92,6 +105,7 @@ __env_option_path_disable()
 {
     # Clean up the runtime.
     unset __env_option_path_add
+    unset __env_option_path_has
     unset __env_option_path_remove
     unset __env_option_path_replace
     unset path
@@ -161,6 +175,39 @@ $PRIORITY|$1"
     fi
 
     __env_option_path_replace
+}
+
+###
+# Checks if a path is being managed.
+#
+# @param  $1  The path to check for.
+# @param  $2  Set to `-q` to not print.
+#
+# @return 0|1 If managed, `0`. Otherwise, `1`.
+##
+__env_option_path_has()
+{
+    local CHECK="$1"
+    local PATHS
+    local QUIET="$2"
+
+    if ! PATHS="$(__env_config_get path.paths)"; then
+        return 1
+    fi
+
+    if echo "$PATHS" | grep "$CHECK" > /dev/null; then
+        if [ "$QUIET" != '-q' ]; then
+            echo "The path is managed."
+        fi
+
+        return 0
+    fi
+
+    if [ "$QUIET" != '-q' ]; then
+        echo "The path is not managed."
+    fi
+
+    return 1
 }
 
 ###
