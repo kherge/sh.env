@@ -1,0 +1,106 @@
+#!/bin/sh
+################################################################################
+# Active System Python Version Manager                                         #
+################################################################################
+
+# Make sure that sh.dev is available.
+if [ -z "$ENV_DIR" ]; then
+    err "sh.dev is required"
+    exit 1
+fi
+
+# The path to the link.
+LINK="$ENV_DIR/options/pyenv/python"
+
+################################################################################
+# Functions                                                                    #
+################################################################################
+
+###
+# Prints to STDERR.
+##
+err()
+{
+    echo "pyenv: $@" >&2
+}
+
+###
+# Prints the path to the Python command that is currently set as default.
+##
+get()
+{
+    if [ -h "$LINK" ]; then
+        if ! readlink "$LINK"; then
+            exit 1
+        fi
+    else
+        err "No default set"
+    fi
+}
+
+###
+# Prints the usage message.
+##
+help()
+{
+    cat - >&2 <<'USAGE'
+Usage: pyenv system [OPTION] [VERSION]
+Manages the default version of Python installed system-wide.
+
+The system may have multiple versions of Python installed system-wide (e.g.
+using apt-get). This tool will allow you to set the default version of Python
+that is run when `python` is run.
+
+OPTION
+
+    -h, --help   Displays this usage message.
+    -u, --unset  Unsets the default version.
+
+ARGUMENTS
+
+    VERSION  The version to set as default (e.g. python[2.7], python[3.9]).
+USAGE
+}
+
+###
+# Sets the default version of path.
+##
+put()
+{
+    if [ -z "$1" ]; then
+        err "Version is required"
+        exit 1
+    fi
+
+    if ! TARGET="$(which python$1)"; then
+        exit 1
+    fi
+
+    remove
+
+    if ! ln -s "$TARGET" "$LINK"; then
+        exit 1
+    fi
+}
+
+###
+# Removes the default, if set.
+##
+remove()
+{
+    if [ -h "$LINK" ] && ! rm "$LINK"; then
+        exit 1
+    fi
+}
+
+################################################################################
+# Main                                                                         #
+################################################################################
+
+# Invoke relevant function.
+case "$1" in
+    "") get;;
+    -h|--help) help;;
+    -u|--unset) remove;;
+    *) put "$1";;
+esac

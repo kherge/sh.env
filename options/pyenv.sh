@@ -32,6 +32,10 @@ __env_option_pyenv_disable()
         return 1
     fi
 
+    if ! path remove '$ENV_DIR/options/pyenv'; then
+        return 1
+    fi
+
     # Clean up the runtime.
     unset PYENV_ROOT
     unset PYENV_SHELL
@@ -73,6 +77,10 @@ __env_option_pyenv_enable()
     fi
 
     if ! path add '$HOME/.pyenv/shims'; then
+        return 1
+    fi
+
+    if ! path add '$ENV_DIR/options/pyenv'; then
         return 1
     fi
 }
