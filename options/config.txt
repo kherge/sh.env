@@ -1,0 +1,4 @@
+         config  Provides the ability to directly interact with the
+                 configuration settings used by th different options. This is a
+                 useful debugging tool, and some options may even require its
+                 use for more advanced functionality.
