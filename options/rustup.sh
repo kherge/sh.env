@@ -29,7 +29,7 @@ __env_option_rustup_disable()
 ##
 __env_option_rustup_enable()
 {
-    if __env_option_disabled rustup; then
+    if __env_option_disabled path; then
         __env_err "rustup: the path option is required"
 
         return 1
