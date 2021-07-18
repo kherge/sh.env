@@ -55,7 +55,9 @@ COMMAND
     add     Adds a managed path.
     has     Checks if a path is managed.
     help    Displays this help message.
+    list    Displays all of the managed paths.
     remove  Removes a managed path.
+    show    Shows PATH, each path on its own line (first to last used).
 
 ADD
 
@@ -85,8 +87,18 @@ HERE
                 return $?
                 ;;
 
+            list)
+                __env_option_path_list "$@"
+                return $?
+                ;;
+
             remove)
                 __env_option_path_remove "$@"
+                return $?
+                ;;
+
+            show)
+                __env_option_path_show "$@"
                 return $?
                 ;;
 
@@ -107,8 +119,10 @@ __env_option_path_disable()
     # Clean up the runtime.
     unset __env_option_path_add
     unset __env_option_path_has
+    unset __env_option_path_list
     unset __env_option_path_remove
     unset __env_option_path_replace
+    unset __env_option_path_show
     unset path
 
     # Restore the original PATH.
@@ -212,6 +226,27 @@ __env_option_path_has()
 }
 
 ###
+# Lists the paths that are managed.
+#
+# @return 0|1 If successful, `0`. Otherwise, `1`.
+##
+__env_option_path_list()
+{
+    local MANAGED_PATH
+
+    if [ -f "$ENV_CONFIG/path.paths" ]; then
+        while read -r MANAGED_PATH; do
+            if [ "$MANAGED_PATH" != '' ]; then
+                MANAGED_PATH="$(echo "$MANAGED_PATH" | cut -d\| -f2)"
+                EVALED_PATH="$(eval "echo \"$MANAGED_PATH\"")"
+
+                echo "$MANAGED_PATH -> $EVALED_PATH"
+            fi
+        done < "$ENV_CONFIG/path.paths"
+    fi
+}
+
+###
 # Removes a managed path.
 #
 # @param  $1  The path to remove.
@@ -268,4 +303,14 @@ __env_option_path_replace()
             fi
         done < "$ENV_CONFIG/path.paths"
     fi
+}
+
+###
+# Shows the paths.
+#
+# @return 0|1 If successful, `0`. Otherwise, `1`.
+##
+__env_option_path_show()
+{
+    echo "$PATH" | tr : "\n"
 }
