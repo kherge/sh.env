@@ -76,6 +76,22 @@ __env_option_pyenv_enable()
         fi
     fi
 
+    if [ ! -d "$ENV_DIR/options/pyenv/pyenv-virtualenv" ]; then
+        if ! command -v git > /dev/null; then
+            __env_err "pyenv: git is required"
+
+            return 1
+        fi
+
+        if ! git clone -q \
+            https://github.com/pyenv/pyenv-virtualenv.git \
+            "$ENV_DIR/options/pyenv/pyenv-virtualenv"; then
+            __env_err "pyenv: could not clone pyenv-virtualenv"
+
+            return 1
+        fi
+    fi
+
     if ! path add '$HOME/.pyenv/bin'; then
         return 1
     fi
@@ -85,6 +101,10 @@ __env_option_pyenv_enable()
     fi
 
     if ! path add '$ENV_DIR/options/pyenv'; then
+        return 1
+    fi
+
+    if ! path add '$ENV_DIR/options/pyenv/pyenv-virtualenv/bin'; then
         return 1
     fi
 }
