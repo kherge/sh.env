@@ -16,6 +16,10 @@ __env_option_pyenv_activate()
     if ! eval "$(pyenv init -)"; then
         return 1
     fi
+
+    if ! eval "$(pyenv virtualenv-init -)"; then
+        return 1
+    fi
 }
 
 ###
