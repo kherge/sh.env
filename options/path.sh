@@ -134,8 +134,8 @@ __env_option_path_disable()
 ##
 __env_option_path_enable()
 {
-    # Make this option top priority.
-    __ENV_PRIORITY=00
+    # Make this option top priority, after the env option.
+    __ENV_PRIORITY=10
 
     # Set default paths.
     __env_option_path_add '$HOME/.local/bin' 99
