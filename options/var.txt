@@ -1,0 +1,3 @@
+            var  Provides the ability to cleanly manage exported environment
+                 variables, instead of directly editing the shell configuration
+                 script for each change.
