@@ -7,6 +7,8 @@
 # options may even require its use for more advanced functionality.            #
 ################################################################################
 
+# shellcheck disable=SC3043
+
 ###
 # Defines the interface function for the user.
 ##

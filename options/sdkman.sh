@@ -7,6 +7,9 @@
 # executed.                                                                    #
 ################################################################################
 
+# shellcheck disable=SC1091
+# shellcheck disable=SC3043
+
 ###
 # Initializes SDKMAN!.
 ##

@@ -7,6 +7,9 @@
 # is checked out.                                                              #
 ################################################################################
 
+# shellcheck disable=SC1091
+# shellcheck disable=SC3043
+
 ###
 # Loads the NVM shell script.
 ##

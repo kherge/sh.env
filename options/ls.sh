@@ -7,6 +7,9 @@
 # the alias.                                                                   #
 ################################################################################
 
+# shellcheck disable=SC2139
+# shellcheck disable=SC3043
+
 ###
 # Creates the alias.
 ##

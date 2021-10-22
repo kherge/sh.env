@@ -5,6 +5,8 @@
 # Customizes the prompt with a simple, compact, colorful one.                  #
 ################################################################################
 
+# shellcheck disable=SC3043
+
 ###
 # Replaces the prompt.
 ##
@@ -47,7 +49,7 @@ __env_option_ps1_disable()
 __env_option_ps1_enable()
 {
     # Should be enabled before Starship.
-    __ENV_PRIORITY=98
+    export __ENV_PRIORITY=98
 
     # Backup the original prompt.
     if ! __env_config_set ps1.prompt "$PS1"; then

@@ -6,6 +6,8 @@
 # is not installed, it will be cloned from the source.                         #
 ################################################################################
 
+# shellcheck disable=SC2016
+
 ###
 # Inititalizes pyenv.
 ##

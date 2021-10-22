@@ -6,6 +6,9 @@
 # in the variable. A new command is added to help make changes to the value.   #
 ################################################################################
 
+# shellcheck disable=SC2016
+# shellcheck disable=SC3043
+
 # Remember the original PATH.
 __ENV_OPTION_PATH_ORIGINAL="$PATH"
 
@@ -135,7 +138,7 @@ __env_option_path_disable()
 __env_option_path_enable()
 {
     # Make this option top priority, after the env option.
-    __ENV_PRIORITY=10
+    export __ENV_PRIORITY=10
 
     # Set default paths.
     __env_option_path_add '$HOME/.local/bin' 99

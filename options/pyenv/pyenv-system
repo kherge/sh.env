@@ -21,7 +21,7 @@ LINK="$ENV_DIR/options/pyenv/python"
 ##
 err()
 {
-    echo "pyenv: $@" >&2
+    echo pyenv: "$@" >&2
 }
 
 ###

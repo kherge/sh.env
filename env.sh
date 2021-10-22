@@ -8,6 +8,9 @@
 # option development experience.                                               #
 ################################################################################
 
+# shellcheck disable=SC1090
+# shellcheck disable=SC3043
+
 ################################################################################
 # Internal                                                                     #
 ################################################################################
@@ -72,7 +75,7 @@ __env_config_set()
 __env_debug()
 {
     if [ "$DEBUG" = '1' ]; then
-        echo "env [debug]: $@" >&2
+        echo "env [debug]:" "$@" >&2
     fi
 }
 
@@ -83,7 +86,7 @@ __env_debug()
 ##
 __env_err()
 {
-    echo "env: $@" >&2
+    echo env: "$@" >&2
 }
 
 ###
@@ -400,7 +403,7 @@ option_list()
 ##
 option()
 {
-    __env_debug "arguments: $@"
+    __env_debug arguments: "$@"
 
     local OPTARG
     local OPTIND

@@ -43,7 +43,7 @@ __env_option_starship_disable()
 __env_option_starship_enable()
 {
     # Should probably be the last thing loaded.
-    __ENV_PRIORITY=99
+    export __ENV_PRIORITY=99
 
     # The cargo command is required.
     if ! command -v cargo > /dev/null; then

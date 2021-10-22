@@ -7,6 +7,8 @@
 # of best practices in code.                                                   #
 ################################################################################
 
+# shellcheck disable=SC3043
+
 ###
 # Activates the functionality offered by the option.
 #
@@ -82,7 +84,7 @@ __env_option_example_enable()
     # this script so it is one of the first to load. This could be useful when
     # options that are loaded later depend on the state of the runtime that is
     # prepared by this option's activation.
-    __ENV_PRIORITY=00
+    export __ENV_PRIORITY=00
 
     # Set some default values.
     if ! __env_config_set example.count 0; then

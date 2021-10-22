@@ -6,6 +6,9 @@
 # instead of directly editing the shell configuration script for each change.  #
 ################################################################################
 
+# shellcheck disable=SC2155
+# shellcheck disable=SC3043
+
 ################################################################################
 # Option Handlers                                                              #
 ################################################################################
@@ -115,7 +118,7 @@ __env_option_var_disable()
 __env_option_var_enable()
 {
     # Should probably be the first thing to load.
-    __ENV_PRIORITY=00
+    export __ENV_PRIORITY=00
 }
 
 ################################################################################
@@ -224,7 +227,6 @@ __env_option_var_has()
 ##
 __env_option_var_list()
 {
-    local LENGTh
     local NAME
     local VALUE
     local VARIABLE

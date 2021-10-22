@@ -6,6 +6,8 @@
 # available. Once installed, the the Cargo path is added to PATH.              #
 ################################################################################
 
+# shellcheck disable=SC2016
+
 ###
 # Does nothing.
 ##
