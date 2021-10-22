@@ -1,1 +1,2 @@
             ps1  Customizes the prompt with a simple, compact, colorful one.
+                 Only supported in BASH and ZSH shells.

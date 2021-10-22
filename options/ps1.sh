@@ -10,10 +10,14 @@
 ##
 __env_option_ps1_activate()
 {
-    if [ "$ZSH_VERSION" != '' ]; then
+    if [ "$BASH_VERSION" != '' ]; then
+        PS1="\[\e[90m\][\t]\[\e[0m\] \[\e[32m\]\W\[\e[0m\] \[\e[35m\]\$\[\e[0m\] "
+    elif [ "$ZSH_VERSION" != '' ]; then
         PS1="%F{8}[%D{%H:%M:%S}]%F{none} %F{green}[%C]%F{none} %F{magenta}$%F{none} "
     else
-        PS1="\[\e[90m\][\t]\[\e[0m\] \[\e[32m\]\W\[\e[0m\] \[\e[35m\]\$\[\e[0m\] "
+        __env_debug "ps1: BASH or ZSH is required"
+
+        return 1
     fi
 }
 
