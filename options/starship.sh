@@ -17,12 +17,14 @@ __env_option_starship_activate()
         elif [ "$ZSH_VERSION" != '' ]; then
             eval "$(starship init zsh)"
         else
-            echo "env: starship: shell not supported" >&2
-            echo >&2
+            __env_debug "starship: shell not supported"
+
+            return 1
         fi
     else
-        echo "env: starship: command not available" >&2
-        echo >&2
+        __env_debug "starship: command not available"
+
+        return 1
     fi
 }
 
@@ -45,7 +47,7 @@ __env_option_starship_enable()
 
     # The cargo command is required.
     if ! command -v cargo > /dev/null; then
-        __env_err "rustup: cargo is required"
+        __env_err "starship: cargo is required"
 
         return 1
     fi
