@@ -1,3 +1,4 @@
          sdkman  Adds support for SDKMAN! by downloading and installing it if
                  it is not available. Once installed, the SDKMAN! shell script
-                 is loaded each time the shell is loaded.
+                 is loaded each time the shell is loaded. Only supported in
+                 BASH and ZSH shells.
