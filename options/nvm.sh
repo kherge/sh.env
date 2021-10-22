@@ -21,6 +21,8 @@ __env_option_nvm_activate()
 
     # Load the shell script.
     . "$NVM_DIR/nvm.sh"
+
+    return $?
 }
 
 ###
