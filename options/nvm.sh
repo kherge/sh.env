@@ -23,9 +23,18 @@ __env_option_nvm_activate()
     fi
 
     # Load the shell script.
+    local STATUS=0
+
     . "$NVM_DIR/nvm.sh"
 
-    return $?
+    STATUS=$?
+
+    # The init script will return 3 without any messages and still work fine.
+    if [ $STATUS -eq 3 ]; then
+        STATUS=0
+    fi
+
+    return $STATUS
 }
 
 ###
