@@ -438,6 +438,7 @@ __env_load()
     local ACTIVATOR="__env_option_$1_activate"
     local FILE="$ENV_DIR/options/$1.sh"
     local NAME="$1"
+    local STATUS=0
 
     if [ ! -f "$FILE" ]; then
         __env_err "$NAME: option does not exist"
@@ -451,8 +452,12 @@ __env_load()
         __env_err "$NAME: option does not have an activator"
     fi
 
-    if ! "$ACTIVATOR"; then
-        __env_err "$NAME: option could not be activated"
+    "$ACTIVATOR"
+
+    STATUS=$?
+
+    if [ $STATUS -ne 0 ]; then
+        __env_err "$NAME [$STATUS]: option could not be activated"
     fi
 
     unset "__env_option_${NAME}_activate"
