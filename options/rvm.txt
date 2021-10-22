@@ -1,0 +1,3 @@
+            rvm  Adds support for RVM by installing it if it is not available.
+                 Once installed, the RVM shell script is loaded each time the
+                 shell is loaded. Only supported in BASH and ZSH shells.
