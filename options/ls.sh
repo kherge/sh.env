@@ -22,6 +22,7 @@ __env_option_ls_activate()
     fi
 
     alias la="ll -a"
+    alias lh="ll -h"
     alias ll="$COMMAND"
 }
 
@@ -32,6 +33,7 @@ __env_option_ls_disable()
 {
     # Delete the alias.
     unset la
+    unset lh
     unset ll
 
     # Delete the setting.
