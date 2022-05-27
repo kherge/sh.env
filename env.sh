@@ -495,7 +495,15 @@ __env_init()
             if [ "$ENABLED" != '' ]; then
                 OPTION="$(echo "$ENABLED" | cut -d\| -f2)"
 
-                __env_load "$OPTION"
+                if [ "$ALLOW" != '' ]; then
+                    if echo "$ALLOW" | grep -F "+$OPTION" > /dev/null; then
+                        __env_load "$OPTION"
+                    else
+                        __env_debug "$OPTION not allowed to be loaded"
+                    fi
+                else
+                    __env_load "$OPTION"
+                fi
             fi
         done < "$ENV_CONFIG/enabled"
     fi
