@@ -1,0 +1,5 @@
+            apt  Tracks packages that have been installed and removed to apt.
+                 Intended to be used in containerized environments where the
+                 volumes are preserved but containers are routinely destroyed
+                 (e.g. using a newer image). If the volume is re-used in a new
+                 container, the packages will be automatically re-installed.
