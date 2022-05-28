@@ -22,6 +22,15 @@ __env_option_apt_activate()
     if ! __env_option_apt_check_tag; then
         return 1
     fi
+
+    # Make sure the hook is still installed.
+    if [ ! -f /etc/apt/apt.conf.d/90shenv ]; then
+        __env_err "apt: installing apt hook to track package changes..."
+
+        if ! __env_option_apt_install_hook; then
+            return 1
+        fi
+    fi
 }
 
 ###
@@ -54,11 +63,6 @@ __env_option_apt_enable()
         return 1
     fi
 
-    # Install the hook.
-    if ! __env_option_apt_install_hook; then
-        return 1
-    fi
-
     # Make sure that apt-mark is available.
     if ! command -v apt-mark > /dev/null; then
         __env_err "apt: apt-mark is required"
@@ -67,7 +71,7 @@ __env_option_apt_enable()
     fi
 
     # Set the current package list.
-    if ! "$ENV_DIR/options/apt/update.sh" "$ENV_CONFIG/apt.list"; then
+    if ! "$ENV_DIR/options/apt/update.sh" "$ENV_CONFIG/apt.list" > /dev/null; then
         __env_err "apt: unable to create package list"
 
         return 1
