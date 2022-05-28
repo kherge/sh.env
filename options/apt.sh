@@ -137,6 +137,12 @@ __env_option_apt_install_hook()
 ##
 __env_option_apt_install_list()
 {
+    if ! sudo apt update; then
+        __env_err "apt: could not update package index"
+
+        return 1
+    fi
+
     if ! sudo xargs -a "$ENV_CONFIG/apt.list" apt-get install -y; then
         __env_err "apt: failed to install packages"
 
