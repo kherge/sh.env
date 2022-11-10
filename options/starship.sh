@@ -54,7 +54,7 @@ __env_option_starship_enable()
 
     # Install Starship if not available.
     if ! command -v starship > /dev/null; then
-        if ! cargo install starship; then
+        if ! cargo install starship --locked; then
             return 1
         fi
     fi
