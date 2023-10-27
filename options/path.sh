@@ -237,7 +237,7 @@ __env_option_path_list()
 {
     local MANAGED_PATH
 
-    if [ -f "$ENV_CONFIG/path.paths" ]; then
+    if [ -f "$__ENV_CONFIG/path.paths" ]; then
         while read -r MANAGED_PATH; do
             if [ "$MANAGED_PATH" != '' ]; then
                 MANAGED_PATH="$(echo "$MANAGED_PATH" | cut -d\| -f2)"
@@ -245,7 +245,7 @@ __env_option_path_list()
 
                 echo "$MANAGED_PATH -> $EVALED_PATH"
             fi
-        done < "$ENV_CONFIG/path.paths"
+        done < "$__ENV_CONFIG/path.paths"
     fi
 }
 
@@ -293,7 +293,7 @@ __env_option_path_replace()
 
     PATH="$__ENV_OPTION_PATH_ORIGINAL"
 
-    if [ -f "$ENV_CONFIG/path.paths" ]; then
+    if [ -f "$__ENV_CONFIG/path.paths" ]; then
         while read -r MANAGED_PATH; do
             if [ "$MANAGED_PATH" != '' ]; then
                 MANAGED_PATH="$(echo "$MANAGED_PATH" | cut -d\| -f2)"
@@ -304,7 +304,7 @@ __env_option_path_replace()
                     PATH="$MANAGED_PATH:$PATH"
                 fi
             fi
-        done < "$ENV_CONFIG/path.paths"
+        done < "$__ENV_CONFIG/path.paths"
     fi
 }
 

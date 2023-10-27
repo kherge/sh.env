@@ -28,8 +28,8 @@ __env_config_get()
 {
     local NAME="$1"
 
-    if [ -f "$ENV_CONFIG/$NAME" ]; then
-        if ! cat "$ENV_CONFIG/$NAME"; then
+    if [ -f "$__ENV_CONFIG/$NAME" ]; then
+        if ! cat "$__ENV_CONFIG/$NAME"; then
             __env_err "env: could not read configuration setting"
 
             return 1
@@ -47,7 +47,7 @@ __env_config_get()
 ##
 __env_config_set()
 {
-    local FILE="$ENV_CONFIG/$1"
+    local FILE="$__ENV_CONFIG/$1"
     local NAME="$1"
     local VALUE="$2"
 
@@ -254,7 +254,7 @@ __env_option_enabled()
 {
     __env_debug "checking if enabled..."
 
-    local CONFIG="$ENV_CONFIG/enabled"
+    local CONFIG="$__ENV_CONFIG/enabled"
 
     if [ -f "$CONFIG" ]; then
         if grep "|$1" "$CONFIG" > /dev/null; then
@@ -382,7 +382,7 @@ option_list()
     while read -r FILE; do
         NAME="$(basename "$FILE" .txt)"
 
-        if grep "|$NAME" "$ENV_CONFIG/enabled" > /dev/null 2>&1; then
+        if grep "|$NAME" "$__ENV_CONFIG/enabled" > /dev/null 2>&1; then
             echo "       (enabled)"
         else
             echo "      (disabled)"
@@ -484,14 +484,14 @@ __env_init()
 
     # Discover the configuration settings path.
     if [ "$XDG_CONFIG_HOME" = '' ]; then
-        export ENV_CONFIG="$HOME/.config/env"
+        export __ENV_CONFIG="$HOME/.config/env"
     else
-        export ENV_CONFIG="$XDG_CONFIG_HOME/env"
+        export __ENV_CONFIG="$XDG_CONFIG_HOME/env"
     fi
 
     # Make sure the directory exists.
-    if [ ! -d "$ENV_CONFIG" ]; then
-        if ! mkdir -p "$ENV_CONFIG"; then
+    if [ ! -d "$__ENV_CONFIG" ]; then
+        if ! mkdir -p "$__ENV_CONFIG"; then
             __env_err "could not create configuration directory"
 
 	    return 1
@@ -502,7 +502,7 @@ __env_init()
     local ENABLED
     local OPTION
 
-    if [ -f "$ENV_CONFIG/enabled" ]; then
+    if [ -f "$__ENV_CONFIG/enabled" ]; then
         while read -r ENABLED; do
             if [ "$ENABLED" != '' ]; then
                 OPTION="$(echo "$ENABLED" | cut -d\| -f2)"
@@ -517,7 +517,7 @@ __env_init()
                     __env_load "$OPTION"
                 fi
             fi
-        done < "$ENV_CONFIG/enabled"
+        done < "$__ENV_CONFIG/enabled"
     fi
 
     unset __env_init

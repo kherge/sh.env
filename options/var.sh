@@ -145,14 +145,14 @@ __env_option_var_export()
 ##
 __env_option_var_export_all()
 {
-    if [ -f "$ENV_CONFIG/var.variables" ]; then
+    if [ -f "$__ENV_CONFIG/var.variables" ]; then
         local VARIABLE
 
         while read VARIABLE; do
             if [ "$VARIABLE" != '' ]; then
                 __env_option_var_export "$VARIABLE"
             fi
-        done < "$ENV_CONFIG/var.variables"
+        done < "$__ENV_CONFIG/var.variables"
     fi
 }
 
@@ -231,7 +231,7 @@ __env_option_var_list()
     local VALUE
     local VARIABLE
 
-    if [ -f "$ENV_CONFIG/var.variables" ]; then
+    if [ -f "$__ENV_CONFIG/var.variables" ]; then
         while read VARIABLE; do
             if [ "$VARIABLE" != '' ]; then
                 NAME="$(echo "$VARIABLE" | cut -d\| -f1)"
@@ -239,7 +239,7 @@ __env_option_var_list()
 
                 echo "$NAME = $VALUE -> $(eval "echo \"$VALUE\"")"
             fi
-        done < "$ENV_CONFIG/var.variables"
+        done < "$__ENV_CONFIG/var.variables"
     fi
 }
 

@@ -120,7 +120,7 @@ __env_option_config_list()
         return 1
     fi
 
-    if ! ls -1 "$ENV_CONFIG" | sort > "$TEMP_FILE"; then
+    if ! ls -1 "$__ENV_CONFIG" | sort > "$TEMP_FILE"; then
         __env_err "config: could not list avavilable settings"
 
         return 1
@@ -136,8 +136,8 @@ __env_option_config_list()
     VALUE_LENGTH=$((75 - $NAME_LENGTH))
 
     while read NAME; do
-        LINES="$(wc -l "$ENV_CONFIG/$NAME" | awk '{print $1}')"
-        VALUE="$(cat "$ENV_CONFIG/$NAME" | head -1)"
+        LINES="$(wc -l "$__ENV_CONFIG/$NAME" | awk '{print $1}')"
+        VALUE="$(cat "$__ENV_CONFIG/$NAME" | head -1)"
 
         if [ ${#VALUE} -gt $VALUE_LENGTH ]; then
             VALUE="$(echo "$VALUE" | cut -b 1-$VALUE_LENGTH) [...]"
