@@ -525,3 +525,12 @@ __env_init()
 
 # Run the initializer.
 __env_init "$1"
+
+# Activate options in the wishlist.
+if [ -f "$__ENV_CONFIG/wishlist" ]; then
+    cat "$__ENV_CONFIG/wishlist" | while read -r OPTION; do
+        option -e "$OPTION"
+    done
+
+    rm "$__ENV_CONFIG/wishlist"
+fi
