@@ -23,8 +23,7 @@ Installation
 1. Clone this repository to `~/.local/share/sh.env`.
 2. Add the following to `.bashrc` (or `.zshrc`, etc):
     ```sh
-    ENV_DIR="$HOME/.local/share/sh.env"
-    . "$ENV_DIR/env.sh"
+    . "$HOME/.local/share/sh.env/env.sh" "$HOME/.local/share/sh.env"
     ```
 3. Create a new or reload your shell session.
 

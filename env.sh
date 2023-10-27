@@ -142,7 +142,7 @@ __env_option_disable()
     __env_debug "disabling option..."
 
     local DISABLER="__env_option_${1}_disable"
-    local FILE="$ENV_DIR/options/$1.sh"
+    local FILE="$__ENV_DIR/options/$1.sh"
     local NAME="$1"
 
     if [ ! -f "$FILE" ]; then
@@ -201,7 +201,7 @@ __env_option_enable()
 
     local ACTIVATOR="__env_option_${1}_activate"
     local ENABLER="__env_option_${1}_enable"
-    local FILE="$ENV_DIR/options/$1.sh"
+    local FILE="$__ENV_DIR/options/$1.sh"
     local NAME="$1"
 
     if [ ! -f "$FILE" ]; then
@@ -377,7 +377,7 @@ option_list()
     echo "Available options:"
     echo
 
-    find "$ENV_DIR/options" -name '*.txt' | \
+    find "$__ENV_DIR/options" -name '*.txt' | \
     sort | \
     while read -r FILE; do
         NAME="$(basename "$FILE" .txt)"
@@ -436,7 +436,7 @@ option()
 __env_load()
 {
     local ACTIVATOR="__env_option_$1_activate"
-    local FILE="$ENV_DIR/options/$1.sh"
+    local FILE="$__ENV_DIR/options/$1.sh"
     local NAME="$1"
     local STATUS=0
 
@@ -470,6 +470,18 @@ __env_load()
 ##
 __env_init()
 {
+    # Configure the directory path to here.
+    __ENV_DIR="$1"
+
+    if [ "$__ENV_DIR" = '' ] && [ "$ENV_DIR" != '' ]; then
+        __ENV_DIR="$ENV_DIR"
+    fi
+
+    if [ "$__ENV_DIR" = '' ]; then
+        echo "env: no path set" >&2
+        return 1
+    fi
+
     # Discover the configuration settings path.
     if [ "$XDG_CONFIG_HOME" = '' ]; then
         export ENV_CONFIG="$HOME/.config/env"
@@ -512,4 +524,4 @@ __env_init()
 }
 
 # Run the initializer.
-__env_init
+__env_init "$1"

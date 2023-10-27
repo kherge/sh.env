@@ -71,7 +71,7 @@ __env_option_apt_enable()
     fi
 
     # Set the current package list.
-    if ! "$ENV_DIR/options/apt/update.sh" "$ENV_CONFIG/apt.list" > /dev/null; then
+    if ! "$__ENV_DIR/options/apt/update.sh" "$ENV_CONFIG/apt.list" > /dev/null; then
         __env_err "apt: unable to create package list"
 
         return 1
@@ -123,7 +123,7 @@ __env_option_apt_has_tag()
 ##
 __env_option_apt_install_hook()
 {
-    local SCRIPT="DPkg::Post-Invoke {\"$ENV_DIR/options/apt/update.sh $ENV_CONFIG/apt.list\";};"
+    local SCRIPT="DPkg::Post-Invoke {\"$__ENV_DIR/options/apt/update.sh $ENV_CONFIG/apt.list\";};"
 
     if ! sudo sh -c "echo '$SCRIPT' > /etc/apt/apt.conf.d/90shenv"; then
         __env_err "apt: unable to install apt hook"

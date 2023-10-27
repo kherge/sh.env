@@ -4,13 +4,13 @@
 ################################################################################
 
 # Make sure that sh.dev is available.
-if [ -z "$ENV_DIR" ]; then
+if [ -z "$__ENV_DIR" ]; then
     err "sh.dev is required"
     exit 1
 fi
 
 # The path to the link.
-LINK="$ENV_DIR/options/pyenv/python"
+LINK="$__ENV_DIR/options/pyenv/python"
 
 ################################################################################
 # Functions                                                                    #
