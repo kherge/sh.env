@@ -1,0 +1,1 @@
+            dock This option adds the ability to customize some macOS dock features.
