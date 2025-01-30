@@ -1,0 +1,2 @@
+       bookmark  This option supports aliasing paths and using the aliases to
+                 more easily change directories in a terminal session.
