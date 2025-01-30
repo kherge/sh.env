@@ -98,7 +98,7 @@ $ALIAS_NAME|$ALIAS_PATH"
 
         # Change directory.
         else
-            ALIAS="$(echo "$ALIASES" | grep -F "$NAME|" | head -1)"
+            ALIAS="$(echo "$ALIASES" | grep -F "$ALIAS_NAME|" | head -1)"
 
             if [ "$ALIAS" = '' ]; then
                 __env_err "env: bookmark: no such alias"
