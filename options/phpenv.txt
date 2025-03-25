@@ -1,0 +1,3 @@
+         phpenv  This option will manage the installation and activation of
+                 phpenv. If phpenv is not installed, it will be cloned from
+                 the source.
