@@ -69,6 +69,11 @@ USAGE
     bm project --delete
 
         This will delete the "project" alias.
+
+    bm project -l
+    bm project --list
+
+        This will list the aliases available.
 HERE
         fi
 
@@ -86,6 +91,28 @@ HERE
             if ! __env_config_set bookmark.aliases "$ALIASES"; then
                 return 1
             fi
+
+        # List the aliases.
+        elif [ "$ALIAS_NAME" = '-l' ] || [ "$ALIAS_NAME" = '--list' ]; then
+            local MAX_SIZE=0
+
+            while read -r COMBO; do
+                CURRENT_SIZE=$(echo "$COMBO" | cut -d\| -f1 | wc -m)
+
+                if [ $CURRENT_SIZE -gt $MAX_SIZE ]; then
+                    MAX_SIZE=$((CURRENT_SIZE - 1))
+                fi
+            done < <(echo "$ALIASES")
+
+            echo "$ALIASES" | sort | while read -r COMBO; do
+                if [ "$COMBO" = '' ]; then
+                    continue
+                fi
+
+                printf "%${MAX_SIZE}s  %s\n" \
+                    "$(echo "$COMBO" | cut -d\| -f1)" \
+                    "$(echo "$COMBO" | cut -d\| -f2)"
+            done
 
         # Define the alias.
         elif [ "$ALIAS_PATH" != '' ]; then
