@@ -24,6 +24,8 @@ __env_option_bookmark_activate()
     # @param  $2  The path.
     #
     # @return 0|1 If successful, `0`. Otherwise, `1`.
+    #
+    # shellcheck disable=SC2317
     ##
     bm()
     {
@@ -109,7 +111,7 @@ $ALIAS_NAME|$ALIAS_PATH"
             ALIAS_PATH="$(echo "$ALIAS" | cut -d\| -f2)"
             ALIAS_PATH="$(eval "echo \"$ALIAS_PATH\"")"
 
-            cd "$ALIAS_PATH"
+            cd "$ALIAS_PATH" || return
         fi
     }
 }
