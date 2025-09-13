@@ -1,1 +1,0 @@
-echo "DPkg::Post-Invoke {\"$__ENV_DIR/options/apt/update.sh\";};"

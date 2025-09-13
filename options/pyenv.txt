@@ -1,3 +1,0 @@
-          pyenv  This option will manage the installation and activation of
-                 pyenv. If pyenv is not installed, it will be cloned from the
-                 source.

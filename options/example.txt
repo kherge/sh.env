@@ -1,3 +1,0 @@
-        example  This option serves as a reference for how other options should
-                 be implemented. The documentation also offers some suggestions
-                 on best practices.
