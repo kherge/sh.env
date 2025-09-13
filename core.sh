@@ -73,6 +73,20 @@ __env_load()
 
     # Load features if any are enabled.
     if [ -f "$FEATURE_LIST" ]; then
+        local TEMP_LIST=
+
+        if ! TEMP_LIST="$(mktemp)"; then
+            __env_error could not create temporary feature list
+
+            return 1
+        fi
+
+        if ! cat "$FEATURE_LIST" > "$TEMP_LIST"; then
+            return 1
+        else
+            echo >> "$TEMP_LIST"
+        fi
+
         while IFS= read -r FEATURE; do
             local FEATURE_FILE="$__ENV_FEATURES_DIR/$FEATURE.sh"
 
@@ -83,7 +97,9 @@ __env_load()
             else
                 __env_debug "no such feature: $FEATURE"
             fi
-        done < "$FEATURE_LIST"
+        done < "$TEMP_LIST"
+
+        rm "$TEMP_LIST"
     else
         __env_debug "no features enabled"
     fi
