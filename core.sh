@@ -137,11 +137,14 @@ feature()
         echo >&2
         echo "COMMAND" >&2
         echo >&2
-        echo "Some features may offer additional commands." >&2
-        echo >&2
         echo "   help  Display the feature's help message." >&2
         echo "    off  Disables the feature." >&2
         echo "     on  Enables the feature." >&2
+        echo >&2
+        echo "Some features may offer additional commands." >&2
+        echo >&2
+        echo "    feature example help" >&2
+        echo >&2
         echo >&2
 
         return 1
