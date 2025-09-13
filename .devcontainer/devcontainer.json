@@ -5,7 +5,10 @@
 		"vscode": {
 			"extensions": [
 				"timonwong.shellcheck"
-			]
+			],
+			"settings": {
+				"shellcheck.customArgs": ["-x"]
+			}
 		}
 	}
 }
