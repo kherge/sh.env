@@ -3,3 +3,6 @@
 
 # Allow ignore files.
 !.gitignore
+
+# Allow dev container configuration.
+!/.devcontainer/
