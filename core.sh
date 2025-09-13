@@ -66,6 +66,32 @@ __env_get()
     fi
 }
 
+# @description Loads all of the enabled features.
+__env_load()
+{
+    local FEATURE_LIST="$__ENV_CONFIG_DIR/core/on"
+
+    # Load features if any are enabled.
+    if [ -f "$FEATURE_LIST" ]; then
+        while IFS= read -r FEATURE; do
+            local FEATURE_FILE="$__ENV_FEATURES_DIR/$FEATURE.sh"
+
+            if [ -f "$FEATURE_FILE" ]; then
+                __env_debug "loading: $FEATURE"
+
+                . "$FEATURE_FILE"
+            else
+                __env_debug "no such feature: $FEATURE"
+            fi
+        done < "$FEATURE_LIST"
+    else
+        __env_debug "no features enabled"
+    fi
+
+    # Self destruct.
+    unset -f __env_load
+}
+
 # @description Forgets that a feature was turned on.
 #
 # @arg $1 The name of the feature.

@@ -47,6 +47,9 @@ __env_init_inner()
     # Load the core functions.
     . "$__ENV_DIR/core.sh"
 
+    # Load enabled features.
+    __env_load
+
     # Announce state.
     __env_debug initialized
 
