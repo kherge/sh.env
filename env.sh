@@ -14,7 +14,7 @@ __env_init()
     # Capture the exit status.
     local STATUS=$?
 
-    # Remove self.
+    # Self destruct
     unset -f __env_init
 
     # Restore original exit status.
@@ -49,4 +49,7 @@ __env_init_inner()
 
     # Announce state.
     __env_debug initialized
+
+    # Self destruct
+    unset -f __env_init_inner
 }
