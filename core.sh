@@ -66,6 +66,54 @@ __env_get()
     fi
 }
 
+# @description Forgets that a feature was turned on.
+#
+# @arg $1 The name of the feature.
+#
+# @exitcode 0 The feature was successfully marked as off.
+# @exitcode 1 The feature could not be marked as off.
+__env_off()
+{
+    local FEATURE="$1"
+    local FEATURES=
+
+    if ! FEATURES="$(__env_get core on)"; then
+        return 1
+    fi
+
+    # Remove the feature from the list.
+    FEATURES="$(printf "%s" "$FEATURES" | grep -v -x "$FEATURE" | sort -u)"
+
+    # Save the changed list.
+    __env_set core on "$FEATURES"
+
+    return $?
+}
+
+# @description Remembers that a feature was turned on.
+#
+# @arg $1 The name of the feature.
+#
+# @exitcode 0 The feature was successfully marked as on.
+# @exitcode 1 The feature could not be marked as on.
+__env_on()
+{
+    local FEATURE="$1"
+    local FEATURES=
+
+    if ! FEATURES="$(__env_get core on)"; then
+        return 1
+    fi
+
+    # Add the feature to the list.
+    FEATURES="$(printf "%s\n%s" "$FEATURES" "$FEATURE" | sort -u | grep -v -x '^$')"
+
+    # Save the changed list.
+    __env_set core on "$FEATURES"
+
+    return $?
+}
+
 # @description Sets the value for a feature configuration setting.
 #
 # If the value for the setting is "-", then STDIN will be read and used as
