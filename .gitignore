@@ -4,5 +4,9 @@
 # Allow ignore files.
 !.gitignore
 
+# Allow the main shell scripts.
+!/core.sh
+!/env.sh
+
 # Allow dev container configuration.
 !/.devcontainer/
